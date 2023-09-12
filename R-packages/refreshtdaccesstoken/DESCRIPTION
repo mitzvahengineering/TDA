@@ -1,0 +1,11 @@
+Package: refreshtdaccesstoken
+Title: Get Access Token from TD Ameritrade via Stored Refresh Token
+Version: 0.0.0.9001
+Authors@R: 
+    person( "Munair", "Simpson", email = "munair@gmail.com", role = c( "aut", "cre" ) )
+Description: This function uses an API key and a monthly generated Refresh Token saved to an RDS file to generate an Access Token using a TD Ameritrade REST API endpoint. The Access Token generated is good for 30 minutes. An HTTP request's authorization header uses this access token [preceded by "Bearer "] to retrieve data from TD Ameritrade's REST API servers.
+License: `use_gpl3_license()`
+Encoding: UTF-8
+Roxygen: list( markdown = TRUE )
+RoxygenNote: 7.2.3
+Imports: httr
