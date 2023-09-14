@@ -96,12 +96,14 @@ m <- rbind( subset( p, p[[ "openInterest" ]] == max( unlist( p[[ "openInterest" 
 o <- rbind( p, c )
 
 # evaluate strike liquidity
+pricedifference <- as.numeric( o[[ "ask" ]] ) - as.numeric( o[[ "bid" ]] )
+askdifferential <- sapply( pricedifference / as.numeric( o[[ "ask" ]] ), function( x ) { ifelse( is.nan( x ), 1, x ) } )
 bidsizeanalysis <- as.numeric( sapply( o[[ "bidSize" ]], function( size ){ if( size > 20 ) { 100 } else { 0 } } ) )
 asksizeanalysis <- as.numeric( sapply( o[[ "askSize" ]], function( size ){ if( size > 20 ) { 100 } else { 0 } } ) )
 oldvolumerating <- as.numeric( sapply( o[[ "openInterest" ]], function( contracts ) { if( contracts > 20 ) { 100 } else { 0 } } ) )
 pennyevaluation <- as.numeric( sapply( o[[ "pennyPilot" ]], function( pennyincrement ) { if( pennyincrement ) { 100 } else { 0 } } ) )
 underlyingscore <- as.numeric( sapply( responselisting[[ "underlying" ]][[ "totalVolume" ]], function( transactionvolume ) { if( transactionvolume > 1000000 ) { 100 } else { 0 } } ) )
-widespreadscore <- as.numeric( sapply( ( as.numeric( o[[ "ask" ]] ) - as.numeric( o[[ "bid" ]] ) ) / as.numeric( o[[ "ask" ]] ), function( differential ){ if( differential < 0.1 ) { 100 } else { 0 } } ) )
+widespreadscore <- as.numeric( sapply( askdifferential, function( differential ){ if( differential < 0.1 ) { 100 } else { 0 } } ) )
 
 # make and display table of evaluations
 evaluatedstrike <- cbind( bidsizeanalysis, asksizeanalysis, oldvolumerating, pennyevaluation, underlyingscore, widespreadscore )
@@ -160,7 +162,6 @@ for( datedcolumn in datedcolumnlist ) {
 
 # format large numbers **
 largenumberlist <- c( "openInterest", "totalVolume" )
-datedcolumnlist <- c( "tradeTimeInLong", "quoteTimeInLong", "expirationDate", "lastTradingDay" )
 for( largenumber in largenumberlist ) {
   p[ ,largenumber ] <- prettyNum( p[ ,largenumber ], big.mark = ",")
   c[ ,largenumber ] <- prettyNum( c[ ,largenumber ], big.mark = ",")
